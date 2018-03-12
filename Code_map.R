@@ -1,4 +1,5 @@
 library(shiny)
+library(dplyr)
 library(leaflet)
 library(RColorBrewer)
 library(ggmap)
@@ -19,15 +20,18 @@ colnames(Project)[9] <- "intro"
 colnames(Project)[10] <- "methods"
 colnames(Project)[11] <- "publications"
 colnames(Project)[12] <- "website"
-colnames(Project)[13] <- "coords"
-colnames(Project)[14] <- "lat"
-colnames(Project)[15] <- "long"
+#add these when figure out writing to google sheet:
+#colnames(Project)[13] <- "coords"
+#colnames(Project)[14] <- "lat"
+#colnames(Project)[15] <- "long"
 
 #check if we didn't already geocode and save back to the google docs
-Project$coords <- ifelse(is.na(Project$coords), geocode(as.character(Project$pi_city), source = "dsk", Project$coords))
+#Project$coords <- ifelse(is.na(Project$coords), geocode(as.character(Project$pi_city), source = "dsk", Project$coords))
+Project$coords <- geocode(as.character(Project$pi_city), source="dsk")
 
 Project$lat <- as.numeric(Project$coords$lat)
 Project$long <- as.numeric(Project$coords$lon)
+
 
 #write this column back to the goole docs, so we don't have to geocode everything every time someone loads the app
 #figure out how to write back to cols in the google docs
@@ -71,10 +75,19 @@ server <- function(input, output, session) {
                        radius = 10)
   })
   
+  # sel_project <- reactive(input$map_marker_click, {
+  #   click <- input$map_marker_click
+  #   sel_project <- Project[which(Project$lat == click$lat & Project$long == click$lng),]
+  #   sel_project[is.na(sel_project)] <- ""
+  #   
+  # })
+  # 
+  
   observeEvent(input$map_marker_click, {
     click <- input$map_marker_click
-    sel_project <- Project[which(Project$lat == click$lat & Project$long == click$lng),]
-    #updateTextInput(session, "selected_proj", paste0(
+    sel_project <- Project %>% 
+         filter(lat == click$lat & long == click$lng)
+
     output$selected_proj <- renderUI({
       HTML(paste0(
         '<td valign="top" style = "padding-left:30px; padding-top:15px;">',
