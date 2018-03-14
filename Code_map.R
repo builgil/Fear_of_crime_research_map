@@ -4,11 +4,22 @@ library(dplyr)
 library(leaflet)
 library(RColorBrewer)
 library(ggmap)
-library(googlesheets)
+#library(googlesheets)
+library(rsconnect)
+#library(gsheet)
+library(openxlsx)
 
-Data <- gs_title("New_methods")
+rsconnect::setAccountInfo(name='fearofcrime',
+                          token='315FC91C5F340BEF3E2C23D514CDFAB0',
+                          secret='Bz5K2+Mokvspn5m1f/x7B1khMYWM0S1m48RV53bC')
 
-Project <- gs_read(ss=Data, ws = "Sheet_1", skip=0)
+Project <- read.xlsx("New_methods.xlsx")
+
+#Project <- gsheet2tbl('docs.google.com/spreadsheets/d/1ouxGY2TT9utiyDHdGNw03bNm-7Y8QW5ebw-XK7BLLHw')
+
+#Data <- gs_title("New_methods")
+
+#Project <- gs_read(ss=Data, ws = "Sheet_1", skip=0)
 
 colnames(Project)[2]   <- "title"
 colnames(Project)[3]   <- "pi_name"
@@ -28,10 +39,10 @@ colnames(Project)[12]  <- "website"
 
 #check if we didn't already geocode and save back to the google docs
 #Project$coords <- ifelse(is.na(Project$coords), geocode(as.character(Project$pi_city), source = "dsk", Project$coords))
-Project$coords  <- geocode(as.character(Project$pi_city), source="dsk")
+Coords  <- geocode(as.character(Project$pi_city), source="dsk")
 
-Project$lat  <- as.numeric(Project$coords$lat)
-Project$long <- as.numeric(Project$coords$lon)
+Project$lat  <- as.numeric(Coords$lat)
+Project$long <- as.numeric(Coords$lon)
 
 #write this column back to the goole docs, so we don't have to geocode everything every time someone loads the app
 #figure out how to write back to cols in the google docs
@@ -101,7 +112,6 @@ server <- function(input, output, session) {
     })
     
   })
-  
   
 }
 
