@@ -50,7 +50,8 @@ Project$long <- as.numeric(Coords$lon)
 
 ui <- bootstrapPage(
   tags$style(type = "text/css", "html, body {width:100%;height:100%}"),
-  leafletOutput("map", width = "100%", height = "80%"),
+  headerPanel("Fear of crime research map"),
+  leafletOutput("map", width = "100%", height = "70%"),
   uiOutput("selected_proj"),
   absolutePanel(top = 10, right = 10)
 )
@@ -70,7 +71,7 @@ server <- function(input, output, session) {
     pal <- colorFactor(c("navy", "red", "orange", "purple"), domain = unique(Project$level))
     
     leaflet(Project) %>%
-      setView(lng = -0.1278328, lat = 51.50726, zoom = 2) %>%
+      setView(lng = 2.0319398, lat = 41.4864855, zoom = 2) %>%
       addProviderTiles(providers$Esri.WorldGrayCanvas) %>%
       addCircleMarkers(clusterOptions = markerClusterOptions(),
                        color = ~pal(level),
