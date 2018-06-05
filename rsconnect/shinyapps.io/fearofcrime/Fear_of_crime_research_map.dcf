@@ -5,9 +5,9 @@ account: fearofcrime
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 298601
-bundleId: 1284443
+bundleId: 1412552
 url: https://fearofcrime.shinyapps.io/Fear_of_crime_research_map/
-when: 1521818904.25239
+when: 1528206227.50237
 asMultiple: FALSE
 asStatic: FALSE
 ignoredFiles: Code_map.R

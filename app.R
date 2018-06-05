@@ -19,7 +19,7 @@ rsconnect::setAccountInfo(name='fearofcrime',
 
 Data <- gs_title("New_methods")
 
-Project <- gs_read(ss=Data, ws = "Sheet_1", skip=0)
+Project <- gs_read(ss=Data, ws = "Sheet_2", skip=0)
 
 colnames(Project)[2]   <- "title"
 colnames(Project)[3]   <- "pi_name"
@@ -39,10 +39,16 @@ colnames(Project)[12]  <- "website"
 
 #check if we didn't already geocode and save back to the google docs
 #Project$coords <- ifelse(is.na(Project$coords), geocode(as.character(Project$pi_city), source = "dsk", Project$coords))
-Coords  <- geocode(as.character(Project$pi_city), source="dsk")
 
-Project$lat  <- as.numeric(Coords$lat)
-Project$long <- as.numeric(Coords$lon)
+#Project$pi_city <- iconv(Project$pi_city, "LATIN2", "UTF-8")
+
+#Coords  <- geocode(as.character(Project$pi_city), source="dsk")
+
+#Project$lat  <- as.numeric(Coords$lat)
+#Project$long <- as.numeric(Coords$lon)
+
+Project$lat  <- as.numeric(Project$lat)
+Project$long <- as.numeric(Project$long)
 
 #write this column back to the goole docs, so we don't have to geocode everything every time someone loads the app
 #figure out how to write back to cols in the google docs
@@ -51,7 +57,8 @@ Project$long <- as.numeric(Coords$lon)
 ui <- bootstrapPage(
   tags$style(type = "text/css", "html, body {width:100%;height:100%}"),
   headerPanel("Fear of crime research map"),
-  leafletOutput("map", width = "100%", height = "70%"),
+  mainPanel("This map visualises both finished and ongoing international research projects making use of new methodologies in fear of crime research. Contact: reka.solymosi@manchester.ac.uk"),
+  leafletOutput("map", width = "100%", height = "65%"),
   uiOutput("selected_proj"),
   absolutePanel(top = 10, right = 10)
 )
@@ -71,7 +78,7 @@ server <- function(input, output, session) {
     pal <- colorFactor(c("navy", "red", "orange", "purple"), domain = unique(Project$level))
     
     leaflet(Project) %>%
-      setView(lng = 2.0319398, lat = 41.4864855, zoom = 2) %>%
+      setView(lng = 2.0319398, lat = 30.4864855, zoom = 2) %>%
       addProviderTiles(providers$Esri.WorldGrayCanvas) %>%
       addCircleMarkers(clusterOptions = markerClusterOptions(),
                        color = ~pal(level),
@@ -98,9 +105,9 @@ server <- function(input, output, session) {
     output$selected_proj <- renderUI({
       HTML(paste0(
         '<td valign="top" style = "padding-left:30px; padding-top:15px;">',
-        "<b>Project title:</b> ", sel_project$title, 
+        "<b>Project title:</b> ", sel_project$title,
+        "<br> <b> PI name: </b>", sel_project$pi_name,       
         "<br> <b> PI institution </b>", sel_project$pi_institute,
-        "<br> <b> PI name: </b>", sel_project$pi_name,
         "<br> <b> Other researchers: </b>", sel_project$coi_names,
         "<br> <b> Other researchers institutes: </b>", sel_project$coi_institutes,
         "<br> <b> Research level: </b>", sel_project$level,
