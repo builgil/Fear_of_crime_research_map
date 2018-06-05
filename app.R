@@ -49,6 +49,25 @@ library(rsconnect)
 #probably making use of gs_edit_cells() ?
 
 Project <- read.csv("test.csv")
+
+Project$lat.x[Project$X == 8] <- 38.263579
+Project$lon[Project$X == 8] <- -0.692128
+
+Project$lat.x[Project$X == 5] <- 38.345181
+Project$lon[Project$X == 5] <- -0.488961
+
+Project$lat.x[Project$X == 11] <- 55.601426
+Project$lon[Project$X == 11] <- 12.979916
+
+Project$lat.x[Project$X == 3] <- 53.478982
+Project$lon[Project$X == 3] <- -2.243377
+
+Project$lat.x[Project$X == 15] <- 51.512072
+Project$lon[Project$X == 15] <- -0.110215
+
+Project$lat.x[Project$X == 7] <- -27.472086
+Project$lon[Project$X == 7] <- 153.030936
+
 colnames(Project)[14] <- "lat"
 colnames(Project)[15] <- "long"
 
