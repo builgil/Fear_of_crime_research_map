@@ -7,8 +7,9 @@ library(ggmap)
 library(googlesheets)
 library(rsconnect)
 #library(gsheet)
-library(openxlsx)
+#library(openxlsx)
 
+<<<<<<< HEAD
 rsconnect::setAccountInfo(name='fearofcrime',
                           token='315FC91C5F340BEF3E2C23D514CDFAB0',
                           secret='Bz5K2+Mokvspn5m1f/x7B1khMYWM0S1m48RV53bC')
@@ -49,10 +50,50 @@ colnames(Project)[12]  <- "website"
 
 Project$lat  <- as.numeric(Project$lat)
 Project$long <- as.numeric(Project$long)
+=======
+# rsconnect::setAccountInfo(name='fearofcrime',
+#                           token='315FC91C5F340BEF3E2C23D514CDFAB0',
+#                           secret='Bz5K2+Mokvspn5m1f/x7B1khMYWM0S1m48RV53bC')
+# 
+# #Project <- read.xlsx("New_methods.xlsx")
+# 
+# #Project <- gsheet2tbl('docs.google.com/spreadsheets/d/1ouxGY2TT9utiyDHdGNw03bNm-7Y8QW5ebw-XK7BLLHw')
+# 
+# Data <- gs_title("New_methods")
+# 
+# Project <- gs_read(ss=Data, ws = "Sheet_1", skip=0)
+# 
+# colnames(Project)[2]   <- "title"
+# colnames(Project)[3]   <- "pi_name"
+# colnames(Project)[4]   <- "pi_institute"
+# colnames(Project)[5]   <- "pi_city"
+# colnames(Project)[6]   <- "coi_names"
+# colnames(Project)[7]   <- "coi_institutes"
+# colnames(Project)[8]   <- "level"
+# colnames(Project)[9]   <- "intro"
+# colnames(Project)[10]  <- "methods"
+# colnames(Project)[11]  <- "publications"
+# colnames(Project)[12]  <- "website"
+# #add these when figure out writing to google sheet:
+# #colnames(Project)[13] <- "coords"
+# #colnames(Project)[14] <- "lat"
+# #colnames(Project)[15] <- "long"
+# 
+# #check if we didn't already geocode and save back to the google docs
+# #Project$coords <- ifelse(is.na(Project$coords), geocode(as.character(Project$pi_city), source = "dsk", Project$coords))
+# Coords  <- geocode(as.character(Project$pi_city), source="dsk")
+# 
+# Project$lat  <- as.numeric(Coords$lat)
+# Project$long <- as.numeric(Coords$lon)
+>>>>>>> ae5fff143073b5a4dff9acdc0606c547526c6585
 
 #write this column back to the goole docs, so we don't have to geocode everything every time someone loads the app
 #figure out how to write back to cols in the google docs
 #probably making use of gs_edit_cells() ?
+
+Project <- read.csv("test.csv")
+colnames(Project)[14] <- "lat"
+colnames(Project)[15] <- "long"
 
 ui <- bootstrapPage(
   tags$style(type = "text/css", "html, body {width:100%;height:100%}"),
